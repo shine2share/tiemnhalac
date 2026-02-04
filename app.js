@@ -1,27 +1,20 @@
 // Cấu hình
 const GOOGLE_SHEETS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0NTNc6hIENjmwHxmUX6kbtyFiZqf3g62WdzaYNclAep7h3sCZGsNyfejkn5MHsOLKuVyucYkuhtmd/pub?output=csv";
-const CACHE_DURATION = 5 * 60 * 1000; // 5 phút cache
-const INSTAGRAM_EMBED_URL = "https://www.instagram.com/p/";
-const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80";
+const CACHE_DURATION = 5 * 60 * 1000;
+const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=500&q=80";
 
 // Biến toàn cục
 let productsData = [];
 let filteredProducts = [];
+let imageCache = new Map(); // Cache hình ảnh
 let currentFilters = {
-    gender: [],
-    category: [],
-    size: [],
-    status: []
+    gender: [], category: [], size: [], status: []
 };
-let lastFetchTime = 0;
 
 // DOM Elements
 const productsContainer = document.getElementById('productsContainer');
 const productCount = document.getElementById('productCount');
 const noProducts = document.getElementById('noProducts');
-const gridViewBtn = document.getElementById('gridView');
-const listViewBtn = document.getElementById('listView');
-const resetFiltersBtn = document.getElementById('resetFilters');
 
 // Hàm khởi tạo
 async function init() {
@@ -29,314 +22,151 @@ async function init() {
     renderProducts();
     setupEventListeners();
     updateProductCount();
-    
-    // Tự động refresh dữ liệu mỗi 5 phút
-    setInterval(async () => {
-        await loadProductsData(true);
-        filterProducts();
-    }, CACHE_DURATION);
 }
 
 // Hàm lấy dữ liệu từ Google Sheets
-async function loadProductsData(forceRefresh = false) {
-    const now = Date.now();
-    
-    if (!forceRefresh && now - lastFetchTime < CACHE_DURATION && productsData.length > 0) {
-        console.log("Đang sử dụng dữ liệu cache...");
-        return;
-    }
-    
+async function loadProductsData() {
     try {
         console.log("Đang tải dữ liệu từ Google Sheets...");
         
-        // Sử dụng proxy để tránh CORS issues trên GitHub Pages
-        const proxyUrl = 'https://api.allorigins.win/raw?url=';
+        // Sử dụng CORS proxy cho GitHub Pages
+        const proxyUrl = 'https://corsproxy.io/?';
         const response = await fetch(proxyUrl + encodeURIComponent(GOOGLE_SHEETS_URL));
         
-        if (!response.ok) {
-            throw new Error(`Lỗi khi tải dữ liệu: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Lỗi: ${response.status}`);
         
         const csvText = await response.text();
         productsData = parseCSV(csvText);
-        
-        console.log(`Đã tải ${productsData.length} sản phẩm`);
-        lastFetchTime = now;
         filteredProducts = [...productsData];
         
-        if (forceRefresh) {
-            resetFilters();
-        }
+        console.log(`Đã tải ${productsData.length} sản phẩm`);
         
     } catch (error) {
-        console.error("Lỗi khi tải dữ liệu:", error);
-        
-        if (productsData.length === 0) {
-            productsData = getSampleData();
-            filteredProducts = [...productsData];
-        }
-        
-        showNotification("Không thể tải dữ liệu mới. Đang sử dụng dữ liệu cache.", "warning");
+        console.error("Lỗi:", error);
+        productsData = getSampleData();
+        filteredProducts = [...productsData];
+        showNotification("Đang sử dụng dữ liệu mẫu", "warning");
     }
 }
 
 // Hàm parse CSV
 function parseCSV(csvText) {
     const products = [];
+    const lines = csvText.split('\n');
     
-    try {
-        const lines = csvText.split('\n');
-        const headers = lines[0].split(',').map(header => header.trim());
+    // Skip header và xử lý từ dòng 2
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
         
-        const sttIndex = headers.findIndex(h => h.toUpperCase() === 'STT');
-        const categoryIndex = headers.findIndex(h => h.toUpperCase().includes('CATEGORY'));
-        const genderIndex = headers.findIndex(h => h.toUpperCase().includes('GENDER'));
-        const sizeIndex = headers.findIndex(h => h.toUpperCase().includes('SIZE'));
-        const urlIndex = headers.findIndex(h => h.toUpperCase().includes('URL'));
-        const statusIndex = headers.findIndex(h => h.toUpperCase().includes('STATUS'));
-        const notesIndex = headers.findIndex(h => h.toUpperCase().includes('NOTES'));
+        // Đơn giản hóa: split bằng dấu phẩy
+        const fields = line.split(',').map(f => f.trim());
         
-        if (sttIndex === -1 || categoryIndex === -1 || genderIndex === -1 || 
-            sizeIndex === -1 || urlIndex === -1 || statusIndex === -1) {
-            throw new Error("CSV không có đầy đủ các cột cần thiết");
-        }
-        
-        for (let i = 1; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) continue;
+        if (fields.length >= 6) {
+            const product = {
+                id: i,
+                category: fields[0] || '',
+                gender: fields[1] || '',
+                size: fields[2] || '',
+                url: fields[3] || '',
+                status: fields[4] || '',
+                notes: fields[5] || ''
+            };
             
-            // Xử lý CSV với regex để hỗ trợ các trường có dấu phẩy
-            const regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
-            let match;
-            const fields = [];
-            
-            while ((match = regex.exec(line)) !== null) {
-                if (match[1]) {
-                    let field = match[1];
-                    if (field.startsWith('"') && field.endsWith('"')) {
-                        field = field.slice(1, -1).replace(/""/g, '"');
-                    }
-                    fields.push(field.trim());
-                }
-            }
-            
-            if (fields.length >= 7) {
-                const product = {
-                    id: parseInt(fields[sttIndex]) || i,
-                    category: fields[categoryIndex] || '',
-                    gender: fields[genderIndex] || '',
-                    size: fields[sizeIndex] || '',
-                    url: fields[urlIndex] || '',
-                    status: fields[statusIndex] || '',
-                    notes: fields[notesIndex] || ''
-                };
-                
-                if (product.url && product.url.includes('instagram.com')) {
-                    products.push(product);
-                }
+            if (product.url.includes('instagram.com')) {
+                products.push(product);
             }
         }
-        
-        console.log(`Đã parse được ${products.length} sản phẩm từ CSV`);
-        
-    } catch (error) {
-        console.error("Lỗi khi parse CSV:", error);
-        return [];
     }
     
     return products;
 }
 
-// Hàm lấy dữ liệu mẫu
-function getSampleData() {
-    return [
-        {
-            id: 1,
-            category: "QUẦN",
-            gender: "MALE",
-            size: "XS",
-            url: "https://www.instagram.com/p/DUVF5iiEmtI/",
-            status: "SOLD",
-            notes: "hàng tặng"
-        },
-        {
-            id: 2,
-            category: "ÁO",
-            gender: "FEMALE",
-            size: "S",
-            url: "https://www.instagram.com/p/DUVFTo5krJA/",
-            status: "AVAILABLE",
-            notes: "độ mới 98%"
-        },
-        {
-            id: 3,
-            category: "QUẦN",
-            gender: "MALE",
-            size: "M",
-            url: "https://www.instagram.com/p/DUVFK4skhKx/",
-            status: "SOLD",
-            notes: "độ mới 99%"
-        },
-        {
-            id: 4,
-            category: "ÁO",
-            gender: "FEMALE",
-            size: "L",
-            url: "https://www.instagram.com/p/DUVFCemkiCZ/",
-            status: "AVAILABLE",
-            notes: "độ mới 98%"
-        },
-        {
-            id: 5,
-            category: "QUẦN",
-            gender: "MALE",
-            size: "XL",
-            url: "https://www.instagram.com/p/DUVE3F_ErZr/",
-            status: "SOLD",
-            notes: "độ mới 98%"
-        },
-        {
-            id: 6,
-            category: "ÁO",
-            gender: "FEMALE",
-            size: "XXL",
-            url: "https://www.instagram.com/p/DUVEwgWEtib/",
-            status: "AVAILABLE",
-            notes: "độ mới 98%"
-        }
-    ];
-}
-
-// Hàm lấy Instagram image URL từ post URL
-function getInstagramImageUrl(instagramUrl) {
+// Hàm lấy thumbnail từ Instagram sử dụng oEmbed
+async function getInstagramThumbnail(instagramUrl) {
     try {
-        // Trích xuất post ID từ URL Instagram
-        const urlParts = instagramUrl.split('/');
-        const postId = urlParts[urlParts.length - 2];
+        // Kiểm tra cache trước
+        if (imageCache.has(instagramUrl)) {
+            return imageCache.get(instagramUrl);
+        }
         
+        // Trích xuất post ID
+        const postId = extractInstagramPostId(instagramUrl);
         if (!postId) return PLACEHOLDER_IMAGE;
         
-        // Sử dụng Instagram oEmbed API để lấy thông tin hình ảnh
-        // Lưu ý: Instagram API có giới hạn, nên chúng ta sẽ sử dụng proxy
-        const proxyUrl = 'https://api.allorigins.win/get?url=';
-        const oembedUrl = `https://www.instagram.com/p/${postId}/media/?size=m`;
+        // Sử dụng oEmbed endpoint
+        const oembedUrl = `https://www.instagram.com/p/${postId}/embed/captioned/`;
         
-        return oembedUrl;
+        // Tạo iframe để lấy thumbnail
+        // Phương pháp này sẽ tải trang embed và trích xuất hình ảnh
+        const thumbnailUrl = await getThumbnailViaEmbed(oembedUrl, postId);
+        
+        // Cache kết quả
+        imageCache.set(instagramUrl, thumbnailUrl);
+        return thumbnailUrl;
         
     } catch (error) {
-        console.error("Lỗi khi xử lý URL Instagram:", error);
+        console.error("Lỗi lấy thumbnail:", error);
         return PLACEHOLDER_IMAGE;
     }
 }
 
-// Hàm tải hình ảnh với fallback
-async function loadProductImage(product) {
+// Hàm trích xuất post ID từ URL
+function extractInstagramPostId(url) {
     try {
-        const imageUrl = getInstagramImageUrl(product.url);
-        
-        // Tạo một promise để kiểm tra hình ảnh
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve(imageUrl);
-            img.onerror = () => {
-                console.log(`Không thể tải hình ảnh từ ${imageUrl}, sử dụng placeholder`);
-                resolve(PLACEHOLDER_IMAGE);
-            };
-            img.src = imageUrl;
-        });
-        
-    } catch (error) {
-        console.error("Lỗi khi tải hình ảnh:", error);
-        return PLACEHOLDER_IMAGE;
+        const match = url.match(/instagram\.com\/p\/([^\/]+)/);
+        return match ? match[1] : null;
+    } catch {
+        return null;
     }
 }
 
-// Hàm hiển thị thông báo
-function showNotification(message, type = "info") {
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
-    
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-${type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
-            <span>${message}</span>
-            <button class="notification-close"><i class="fas fa-times"></i></button>
-        </div>
-    `;
-    
-    if (!document.querySelector('#notification-styles')) {
-        const style = document.createElement('style');
-        style.id = 'notification-styles';
-        style.textContent = `
-            .notification {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: white;
-                border-left: 4px solid #6c5ce7;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                border-radius: 8px;
-                padding: 15px;
-                z-index: 1000;
-                max-width: 350px;
-                animation: slideIn 0.3s ease;
-            }
-            .notification-warning {
-                border-left-color: #f39c12;
-            }
-            .notification-content {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-            .notification-content i {
-                font-size: 1.2rem;
-            }
-            .notification-warning .notification-content i {
-                color: #f39c12;
-            }
-            .notification-content span {
-                flex: 1;
-                font-size: 0.9rem;
-            }
-            .notification-close {
-                background: none;
-                border: none;
-                color: #777;
-                cursor: pointer;
-                font-size: 1rem;
-                padding: 0;
-            }
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.animation = 'slideOut 0.3s ease';
-            notification.style.transform = 'translateX(100%)';
-            notification.style.opacity = '0';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
+// Phương pháp sử dụng embed để lấy thumbnail
+function getThumbnailViaEmbed(oembedUrl, postId) {
+    return new Promise((resolve) => {
+        // Tạo một iframe ẩn
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.style.position = 'absolute';
+        iframe.style.left = '-9999px';
+        iframe.src = oembedUrl;
+        
+        // Sử dụng fallback URL dựa trên postId
+        // Instagram thường có pattern cho thumbnail
+        const fallbackUrl = `https://instagram.com/p/${postId}/media/?size=m`;
+        
+        // Đặt timeout
+        const timeout = setTimeout(() => {
+            document.body.removeChild(iframe);
+            resolve(fallbackUrl);
+        }, 3000);
+        
+        iframe.onload = () => {
+            clearTimeout(timeout);
+            try {
+                // Cố gắng lấy hình ảnh từ iframe
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const img = iframeDoc.querySelector('img');
+                
+                if (img && img.src) {
+                    resolve(img.src);
+                } else {
+                    resolve(fallbackUrl);
                 }
-            }, 300);
-        }
-    }, 5000);
-    
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.addEventListener('click', () => {
-        notification.remove();
+            } catch (e) {
+                resolve(fallbackUrl);
+            }
+            
+            document.body.removeChild(iframe);
+        };
+        
+        iframe.onerror = () => {
+            clearTimeout(timeout);
+            resolve(fallbackUrl);
+            document.body.removeChild(iframe);
+        };
+        
+        document.body.appendChild(iframe);
     });
 }
 
@@ -351,56 +181,32 @@ async function renderProducts() {
     
     noProducts.style.display = 'none';
     
-    // Hiển thị loading skeleton
-    showProductSkeletons();
-    
-    // Tải và hiển thị từng sản phẩm
-    for (const product of filteredProducts) {
-        const productCard = await createProductCard(product);
+    // Hiển thị tất cả sản phẩm với placeholder trước
+    filteredProducts.forEach(product => {
+        const productCard = createProductCardSkeleton(product);
         productsContainer.appendChild(productCard);
-    }
+    });
     
-    // Xóa skeleton nếu còn
-    const skeletons = document.querySelectorAll('.product-skeleton');
-    skeletons.forEach(skeleton => skeleton.remove());
+    // Sau đó tải hình ảnh từng cái một
+    await loadImagesSequentially();
 }
 
-// Hàm hiển thị skeleton loading
-function showProductSkeletons() {
-    const skeletonCount = Math.min(filteredProducts.length, 6);
-    
-    for (let i = 0; i < skeletonCount; i++) {
-        const skeleton = document.createElement('div');
-        skeleton.className = 'product-skeleton';
-        skeleton.innerHTML = `
-            <div class="skeleton-image"></div>
-            <div class="skeleton-info">
-                <div class="skeleton-line skeleton-title"></div>
-                <div class="skeleton-line skeleton-detail"></div>
-                <div class="skeleton-line skeleton-detail"></div>
-                <div class="skeleton-line skeleton-description"></div>
-            </div>
-        `;
-        productsContainer.appendChild(skeleton);
-    }
-}
-
-// Hàm tạo card sản phẩm
-async function createProductCard(product) {
+// Tạo card skeleton trước
+function createProductCardSkeleton(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
+    card.dataset.productId = product.id;
     
-    const categoryText = product.category === 'ÁO' ? 'Áo' : (product.category === 'QUẦN' ? 'Quần' : product.category);
-    const genderText = product.gender === 'MALE' ? 'Nam' : (product.gender === 'FEMALE' ? 'Nữ' : product.gender);
+    const categoryText = product.category === 'ÁO' ? 'Áo' : 'Quần';
+    const genderText = product.gender === 'MALE' ? 'Nam' : 'Nữ';
     const statusText = product.status === 'AVAILABLE' ? 'Còn hàng' : 'Đã bán';
     const statusClass = product.status === 'AVAILABLE' ? 'status-available' : 'status-sold';
     
-    // Tải hình ảnh
-    const imageUrl = await loadProductImage(product);
-    
     card.innerHTML = `
         <div class="product-image">
-            <img src="${imageUrl}" alt="${categoryText} ${genderText} size ${product.size}" loading="lazy" onerror="this.src='${PLACEHOLDER_IMAGE}'">
+            <div class="image-placeholder">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
             <div class="product-status ${statusClass}">${statusText}</div>
         </div>
         <div class="product-info">
@@ -425,36 +231,174 @@ async function createProductCard(product) {
             <p class="product-description">
                 <strong>Ghi chú:</strong> ${product.notes || 'Không có ghi chú'}
             </p>
-            <div class="product-instagram">
+            <div class="instagram-link">
                 <i class="fab fa-instagram"></i>
                 <span>Xem trên Instagram</span>
             </div>
         </div>
     `;
     
-    card.addEventListener('click', (e) => {
-        // Không mở link khi click vào các phần tử không phải là card chính
-        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('button') || e.target.closest('a')) {
-            return;
-        }
-        
-        if (product.url && product.url.includes('instagram.com')) {
-            window.open(product.url, '_blank');
-        }
+    card.addEventListener('click', () => {
+        window.open(product.url, '_blank');
     });
     
     return card;
 }
 
-// Các hàm còn lại giữ nguyên...
-// [Các hàm updateProductCount, filterProducts, getSelectedValues, resetFilters, refreshData, setupEventListeners vẫn giữ nguyên như code trước]
-
-// Hàm cập nhật số lượng sản phẩm
-function updateProductCount() {
-    productCount.textContent = filteredProducts.length;
+// Tải hình ảnh tuần tự
+async function loadImagesSequentially() {
+    const cards = document.querySelectorAll('.product-card');
+    
+    for (const card of cards) {
+        const productId = card.dataset.productId;
+        const product = filteredProducts.find(p => p.id == productId);
+        
+        if (product) {
+            try {
+                const thumbnailUrl = await getInstagramThumbnail(product.url);
+                await updateCardImage(card, thumbnailUrl);
+            } catch (error) {
+                console.error(`Lỗi tải hình ảnh cho sản phẩm ${productId}:`, error);
+                await updateCardImage(card, PLACEHOLDER_IMAGE);
+            }
+            
+            // Delay giữa các request để tránh bị block
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
 }
 
-// Hàm lọc sản phẩm
+// Cập nhật hình ảnh cho card
+async function updateCardImage(card, imageUrl) {
+    const imageContainer = card.querySelector('.product-image');
+    const placeholder = card.querySelector('.image-placeholder');
+    
+    if (placeholder) {
+        // Tạo thẻ img mới
+        const img = new Image();
+        img.src = imageUrl;
+        img.alt = 'Sản phẩm';
+        img.className = 'product-img';
+        
+        img.onload = () => {
+            placeholder.remove();
+            imageContainer.insertBefore(img, imageContainer.firstChild);
+            img.style.opacity = '0';
+            
+            // Hiệu ứng fade in
+            setTimeout(() => {
+                img.style.transition = 'opacity 0.5s ease';
+                img.style.opacity = '1';
+            }, 10);
+        };
+        
+        img.onerror = () => {
+            placeholder.innerHTML = '<i class="fas fa-image"></i>';
+            placeholder.style.background = '#f0f0f0';
+            placeholder.style.color = '#999';
+        };
+    }
+}
+
+// Thêm CSS cho placeholder
+function addCustomStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .image-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #f6f6f6 25%, #ffffff 25%, #ffffff 50%, #f6f6f6 50%, #f6f6f6 75%, #ffffff 75%, #ffffff);
+            background-size: 40px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ddd;
+            font-size: 2rem;
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .instagram-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #E1306C;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .instagram-link i {
+            font-size: 1.1rem;
+        }
+        
+        .fa-spin {
+            animation: fa-spin 2s infinite linear;
+        }
+        
+        @keyframes fa-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Hàm setup
+function setupEventListeners() {
+    // Filter checkboxes
+    document.querySelectorAll('.filter-checkbox input').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const id = this.id;
+            
+            if (id.includes('all') && this.checked) {
+                const group = id.split('-')[1];
+                document.querySelectorAll(`input[id^="filter-${group}-"]:not(#${id})`).forEach(cb => {
+                    cb.checked = false;
+                });
+            }
+            
+            if (!id.includes('all') && this.checked) {
+                const group = id.split('-')[1];
+                const allCheckbox = document.getElementById(`filter-${group}-all`);
+                if (allCheckbox) allCheckbox.checked = false;
+            }
+            
+            filterProducts();
+        });
+    });
+    
+    // Reset filters
+    document.getElementById('resetFilters').addEventListener('click', resetFilters);
+    
+    // View controls
+    document.getElementById('gridView').addEventListener('click', () => {
+        productsContainer.className = 'products-container grid-view';
+    });
+    
+    document.getElementById('listView').addEventListener('click', () => {
+        productsContainer.className = 'products-container list-view';
+    });
+    
+    // Refresh button
+    const refreshBtn = document.createElement('button');
+    refreshBtn.id = 'refreshDataBtn';
+    refreshBtn.className = 'btn-refresh';
+    refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Làm mới';
+    refreshBtn.addEventListener('click', () => {
+        location.reload();
+    });
+    
+    document.querySelector('.header-content').appendChild(refreshBtn);
+}
+
+// Các hàm filter khác giữ nguyên
 function filterProducts() {
     const genderFilters = getSelectedValues('gender');
     const categoryFilters = getSelectedValues('category');
@@ -495,143 +439,62 @@ function filterProducts() {
     updateProductCount();
 }
 
-// Hàm lấy giá trị từ các checkbox được chọn
 function getSelectedValues(type) {
     const checkboxes = document.querySelectorAll(`input[id^="filter-${type}-"]:checked`);
-    return Array.from(checkboxes).map(cb => {
-        const id = cb.id;
-        return id.replace(`filter-${type}-`, '');
-    });
+    return Array.from(checkboxes).map(cb => cb.id.replace(`filter-${type}-`, ''));
 }
 
-// Hàm đặt lại bộ lọc
 function resetFilters() {
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        if (checkbox.id.includes('all')) {
-            checkbox.checked = true;
-        } else {
-            checkbox.checked = false;
-        }
+        checkbox.checked = checkbox.id.includes('all');
     });
-    
-    currentFilters = {
-        gender: [],
-        category: [],
-        size: [],
-        status: []
-    };
     
     filteredProducts = [...productsData];
     renderProducts();
     updateProductCount();
 }
 
-// Hàm refresh dữ liệu thủ công
-async function refreshData() {
-    showNotification("Đang làm mới dữ liệu...", "info");
-    await loadProductsData(true);
-    showNotification("Đã cập nhật dữ liệu mới!", "info");
+function updateProductCount() {
+    productCount.textContent = filteredProducts.length;
 }
 
-// Hàm thiết lập event listeners
-function setupEventListeners() {
-    document.querySelectorAll('.filter-checkbox input').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const id = this.id;
-            
-            if (id.includes('all') && this.checked) {
-                const group = id.split('-')[1];
-                document.querySelectorAll(`input[id^="filter-${group}-"]:not(#${id})`).forEach(cb => {
-                    cb.checked = false;
-                });
-            }
-            
-            if (!id.includes('all') && this.checked) {
-                const group = id.split('-')[1];
-                const allCheckbox = document.getElementById(`filter-${group}-all`);
-                if (allCheckbox) allCheckbox.checked = false;
-            }
-            
-            filterProducts();
-        });
-    });
+// Hàm hiển thị thông báo
+function showNotification(message, type = "info") {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas fa-${type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
     
-    resetFiltersBtn.addEventListener('click', resetFilters);
+    document.body.appendChild(notification);
     
-    gridViewBtn.addEventListener('click', () => {
-        gridViewBtn.classList.add('active');
-        listViewBtn.classList.remove('active');
-        productsContainer.classList.remove('list-view');
-        productsContainer.classList.add('grid-view');
-    });
-    
-    listViewBtn.addEventListener('click', () => {
-        listViewBtn.classList.add('active');
-        gridViewBtn.classList.remove('active');
-        productsContainer.classList.remove('grid-view');
-        productsContainer.classList.add('list-view');
-    });
-    
-    const mobileToggle = document.getElementById('mobileToggle');
-    const sidebar = document.querySelector('.sidebar');
-    
-    if (mobileToggle) {
-        mobileToggle.addEventListener('click', () => {
-            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
-        });
-        
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 992) {
-                sidebar.style.display = 'block';
-            }
-        });
-    }
-    
-    const refreshBtn = document.createElement('button');
-    refreshBtn.id = 'refreshDataBtn';
-    refreshBtn.className = 'btn-refresh';
-    refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Làm mới dữ liệu';
-    refreshBtn.addEventListener('click', refreshData);
-    
-    const headerContent = document.querySelector('.header-content');
-    if (headerContent) {
-        headerContent.appendChild(refreshBtn);
-        
-        const style = document.createElement('style');
-        style.textContent = `
-            .btn-refresh {
-                background-color: var(--secondary-color);
-                color: white;
-                border: none;
-                padding: 8px 16px;
-                border-radius: var(--radius);
-                font-size: 0.9rem;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                transition: all 0.3s;
-            }
-            .btn-refresh:hover {
-                background-color: #5b4fcf;
-                transform: scale(1.05);
-            }
-            .btn-refresh i {
-                transition: transform 0.5s;
-            }
-            .btn-refresh:active i {
-                transform: rotate(360deg);
-            }
-            @media (max-width: 768px) {
-                .btn-refresh {
-                    padding: 6px 12px;
-                    font-size: 0.8rem;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
 
-// Khởi chạy ứng dụng
-document.addEventListener('DOMContentLoaded', init);
+// Dữ liệu mẫu
+function getSampleData() {
+    return [
+        {
+            id: 1, category: "QUẦN", gender: "MALE", size: "XS",
+            url: "https://www.instagram.com/p/DUVF5iiEmtI/",
+            status: "SOLD", notes: "hàng tặng"
+        },
+        {
+            id: 2, category: "ÁO", gender: "FEMALE", size: "S",
+            url: "https://www.instagram.com/p/DUVFTo5krJA/",
+            status: "AVAILABLE", notes: "độ mới 98%"
+        },
+        // ... thêm các sản phẩm khác
+    ];
+}
+
+// Khởi tạo
+document.addEventListener('DOMContentLoaded', () => {
+    addCustomStyles();
+    init();
+});
