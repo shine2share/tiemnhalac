@@ -215,7 +215,7 @@ function getInstagramEmbedUrl(instagramUrl) {
     try {
         const postId = extractPostId(instagramUrl);
         if (postId) {
-            return `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&amp;utm_campaign=loading`;
+            return `https://www.instagram.com/2hand.tiemnhalac/p/${postId}/?utm_source=ig_embed&amp;utm_campaign=loading`;
         }
     } catch (e) {
         console.error('Lỗi parse URL:', e);
