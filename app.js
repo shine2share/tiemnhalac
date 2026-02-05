@@ -225,7 +225,7 @@ function getInstagramEmbedUrl(instagramUrl) {
 
 // Hàm trích xuất post ID
 function extractPostId(url) {
-    const match = url.match(/instagram\.com\/p\/([^\/\?]+)/);
+    const match = url.match(/instagram\.com\/[^\/]+\/p\/([^\/\?]+)/);
     return match ? match[1] : null;
 }
 
