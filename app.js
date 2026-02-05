@@ -55,7 +55,8 @@ async function loadProductsData() {
         
         // Sử dụng CORS proxy miễn phí
         const proxyUrl = 'https://api.allorigins.win/raw?url=';
-        const response = await fetch(proxyUrl + encodeURIComponent(GOOGLE_SHEETS_URL));
+        //const response = await fetch(proxyUrl + encodeURIComponent(GOOGLE_SHEETS_URL));
+        const response = await fetch(GOOGLE_SHEETS_URL);
         
         if (!response.ok) throw new Error(`Lỗi: ${response.status}`);
         
@@ -153,7 +154,7 @@ function createProductCard(product) {
     card.innerHTML = `
         <div class="product-image">
             <div class="image-container">
-                <img src="${placeholderImage}" 
+                <img src="${embedUrl ? embedUrl : placeholderImage}" 
                      alt="${categoryText} ${genderText} size ${product.size}" 
                      class="product-img" 
                      loading="lazy">
@@ -214,7 +215,7 @@ function getInstagramEmbedUrl(instagramUrl) {
     try {
         const postId = extractPostId(instagramUrl);
         if (postId) {
-            return `https://www.instagram.com/p/${postId}/embed`;
+            return `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&amp;utm_campaign=loading`;
         }
     } catch (e) {
         console.error('Lỗi parse URL:', e);
