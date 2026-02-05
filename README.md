@@ -1,4 +1,4 @@
-# Tiem Nhal Ac - Website Bán Quần Áo
+# Tiem Nha Lac - Website Bán Quần Áo
 
 Website bán quần áo được xây dựng bằng HTML, CSS và JavaScript.
 
