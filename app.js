@@ -107,25 +107,34 @@ function createProductCard(product) {
     const statusClass = product.status === 'AVAILABLE' ? 'status-available' : 'status-sold';
     const postId = extractPostId(product.url);
     
+    const isMobile = window.innerWidth <= 768;
+    const embedHeight = isMobile ? '220px' : '400px';
+    
+    let notesDisplay = product.notes || '';
+    if (isMobile && notesDisplay.length > 60) {
+        notesDisplay = notesDisplay.substring(0, 60) + '...';
+    }
+    
     card.innerHTML = `
-        <div class="instagram-embed-container">
+        <div class="instagram-embed-container" style="height: ${embedHeight}">
             ${postId ? `
             <div class="instagram-embed-wrapper">
                 <div class="instagram-embed-loading">
                     <i class="fas fa-spinner fa-spin"></i>
-                    <span>Đang tải bài viết Instagram...</span>
+                    <span>Đang tải...</span>
                 </div>
                 <iframe src="https://www.instagram.com/p/${postId}/embed/captioned/" 
                         frameborder="0" 
                         scrolling="no" 
                         allowtransparency="true"
+                        style="height: ${embedHeight}"
                         onload="this.classList.add('loaded'); this.parentElement.querySelector('.instagram-embed-loading').style.display='none'">
                 </iframe>
             </div>
             ` : `
             <div class="instagram-error">
                 <i class="fab fa-instagram"></i>
-                <p>Không có link Instagram</p>
+                <p>Không có link</p>
             </div>
             `}
         </div>
@@ -142,7 +151,6 @@ function createProductCard(product) {
                 </div>
                 <div class="product-status-info">
                     <div class="product-status-badge ${statusClass}">${statusText}</div>
-                    <div class="product-id">ID: ${product.id}</div>
                 </div>
             </div>
             
@@ -168,25 +176,19 @@ function createProductCard(product) {
                         <div class="value">${categoryText}</div>
                     </div>
                 </div>
-                <div class="product-detail-item">
-                    <i class="fas fa-info-circle"></i>
-                    <div>
-                        <div class="label">Trạng thái</div>
-                        <div class="value">${statusText}</div>
-                    </div>
-                </div>
+                <!-- Đã bỏ item thứ 4 (status) vì đã move lên header -->
             </div>
             
             ${product.notes ? `
             <div class="product-notes">
                 <strong>Ghi chú:</strong>
-                <p>${product.notes}</p>
+                <p>${notesDisplay}</p>
             </div>
             ` : ''}
             
             ${product.url ? `
             <a href="${product.url}" target="_blank" class="instagram-link-btn">
-                <i class="fab fa-instagram"></i> Xem bài viết Instagram
+                <i class="fab fa-instagram"></i> Xem bài viết
             </a>
             ` : ''}
         </div>

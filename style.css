@@ -1381,3 +1381,1127 @@ footer {
         gap: 8px;
     }
 }
+/* ============================================
+   MOBILE OPTIMIZATION FOR INSTAGRAM EMBED
+   ============================================ */
+
+/* Instagram embed cho mobile */
+@media (max-width: 768px) {
+    /* Điều chỉnh container chính */
+    .container {
+        padding: 0 15px;
+    }
+    
+    /* Instagram embed container */
+    .instagram-embed-container {
+        height: 320px !important;
+        margin: -10px -15px 0 -15px;
+        width: calc(100% + 30px);
+        border-radius: 0;
+        background: #fff;
+    }
+    
+    .instagram-embed-wrapper {
+        height: 100%;
+    }
+    
+    .instagram-embed-wrapper iframe {
+        height: 320px !important;
+        width: 100%;
+        transform: scale(0.95);
+        transform-origin: top center;
+    }
+    
+    /* Điều chỉnh loading state */
+    .instagram-embed-loading {
+        padding: 20px;
+    }
+    
+    .instagram-embed-loading i {
+        font-size: 2rem;
+    }
+    
+    .instagram-embed-loading span {
+        font-size: 0.9rem;
+        text-align: center;
+        line-height: 1.4;
+    }
+    
+    /* Điều chỉnh product card */
+    .product-card {
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 0;
+    }
+    
+    .product-info {
+        padding: 20px 15px;
+    }
+    
+    /* Header layout cho mobile */
+    .product-info-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .product-status-info {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 5px;
+    }
+    
+    .product-status-badge {
+        min-width: 90px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .product-id {
+        font-size: 0.75rem;
+    }
+    
+    /* Product details grid */
+    .product-details-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .product-detail-item {
+        gap: 8px;
+    }
+    
+    .product-detail-item i {
+        font-size: 0.9rem;
+        width: 18px;
+    }
+    
+    .product-detail-item .label {
+        font-size: 0.85rem;
+    }
+    
+    .product-detail-item .value {
+        font-size: 0.85rem;
+    }
+    
+    /* Product notes */
+    .product-notes {
+        padding: 12px;
+        margin: 15px 0;
+        font-size: 0.9rem;
+    }
+    
+    /* Instagram button */
+    .instagram-link-btn {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+        margin-top: 10px;
+    }
+    
+    /* Grid view adjustment */
+    .grid-view {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    /* Products container spacing */
+    .products-container {
+        gap: 20px;
+    }
+}
+
+/* Small mobile devices (iPhone SE, small Android) */
+@media (max-width: 480px) {
+    /* Further adjustments for very small screens */
+    .instagram-embed-container {
+        height: 280px !important;
+    }
+    
+    .instagram-embed-wrapper iframe {
+        height: 280px !important;
+        transform: scale(0.9);
+    }
+    
+    /* Product details - 1 column layout */
+    .product-details-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    /* Product header compact */
+    .product-info-header {
+        gap: 8px;
+    }
+    
+    .product-title-wrapper .main-title {
+        font-size: 1.1rem;
+        line-height: 1.3;
+    }
+    
+    .product-title-wrapper .sub-title {
+        font-size: 0.85rem;
+        gap: 6px;
+    }
+    
+    /* Status badge smaller */
+    .product-status-badge {
+        min-width: 80px;
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+    
+    /* Button full width */
+    .instagram-link-btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    /* Product notes compact */
+    .product-notes {
+        padding: 10px;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+    .instagram-embed-container {
+        height: 260px !important;
+    }
+    
+    .instagram-embed-wrapper iframe {
+        height: 260px !important;
+        transform: scale(0.85);
+    }
+    
+    .product-info {
+        padding: 15px 12px;
+    }
+    
+    .product-status-badge {
+        min-width: 70px;
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+}
+
+/* ============================================
+   INSTAGRAM EMBED SPECIFIC FIXES
+   ============================================ */
+
+/* Fix cho Instagram embed navigation buttons */
+.instagram-embed-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Tạo không gian cho navigation buttons */
+.instagram-embed-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+    z-index: 5;
+    pointer-events: none;
+}
+
+.instagram-embed-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* Container để giới hạn iframe */
+.embed-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Điều chỉnh iframe để phù hợp */
+.instagram-embed-wrapper iframe {
+    position: relative;
+    z-index: 1;
+    background: white;
+}
+
+/* ============================================
+   IMPROVED PRODUCT CARD FOR MOBILE
+   ============================================ */
+
+/* Mobile product card layout */
+@media (max-width: 768px) {
+    /* Intro section */
+    .intro {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .intro h2 {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+    }
+    
+    /* Products header */
+    .products-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .products-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .view-controls {
+        align-self: flex-end;
+    }
+    
+    /* Sidebar adjustments */
+    .sidebar {
+        margin-bottom: 20px;
+    }
+    
+    .filter-section {
+        padding: 20px;
+    }
+    
+    /* Footer adjustments */
+    footer {
+        padding: 30px 0 15px;
+        margin-top: 30px;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .footer-section {
+        text-align: center;
+    }
+}
+
+/* ============================================
+   TOUCH-FRIENDLY IMPROVEMENTS
+   ============================================ */
+
+/* Tăng kích thước touch targets cho mobile */
+@media (max-width: 768px) {
+    /* Filter checkboxes */
+    .filter-checkbox {
+        padding: 12px 0;
+        min-height: 44px; /* Apple's recommended minimum touch target */
+    }
+    
+    .filter-checkbox input {
+        width: 22px;
+        height: 22px;
+    }
+    
+    /* Buttons */
+    .btn-reset,
+    .instagram-link-btn,
+    .btn-refresh {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* View buttons */
+    .view-btn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    /* Reset button */
+    .btn-reset {
+        margin-top: 15px;
+    }
+    
+    /* Product detail items - better touch */
+    .product-detail-item {
+        padding: 8px;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+    }
+    
+    .product-detail-item:active {
+        background-color: rgba(108, 92, 231, 0.1);
+    }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Reduce animations on mobile for better performance */
+@media (max-width: 768px) {
+    .product-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .product-status-badge:hover {
+        transform: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+    
+    .instagram-link-btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .instagram-link-btn:active {
+        transform: scale(0.98);
+    }
+}
+
+/* ============================================
+   SAFARI SPECIFIC FIXES
+   ============================================ */
+
+/* Fix for Safari mobile */
+@supports (-webkit-touch-callout: none) {
+    .instagram-embed-container {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .instagram-embed-wrapper iframe {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Fix cho height calculations trên Safari */
+    .instagram-embed-wrapper {
+        height: -webkit-fill-available;
+    }
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    .instagram-embed-container {
+        background: #1a1a1a;
+    }
+    
+    .instagram-embed-wrapper::before,
+    .instagram-embed-wrapper::after {
+        background: linear-gradient(to bottom, rgba(26,26,26,0.9) 0%, rgba(26,26,26,0.5) 50%, transparent 100%);
+    }
+    
+    .instagram-embed-loading {
+        background: #1a1a1a;
+        color: #ccc;
+    }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR FOR IFRAME (OPTIONAL)
+   ============================================ */
+
+/* Hide scrollbars but keep functionality */
+.instagram-embed-wrapper iframe::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.instagram-embed-wrapper iframe {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+/* ============================================
+   COMPACT MOBILE LAYOUT
+   ============================================ */
+
+/* Mobile-specific compact styles */
+@media (max-width: 768px) {
+    /* Giảm khoảng cách tổng thể */
+    main {
+        padding: 20px 0;
+    }
+    
+    .products-container {
+        gap: 15px !important;
+    }
+    
+    /* COMPACT INSTAGRAM EMBED */
+    .instagram-embed-container {
+        height: 220px !important; /* Giảm từ 320px xuống 220px */
+        margin: 0;
+        width: 100%;
+        border-radius: var(--radius) var(--radius) 0 0;
+        background: #fafafa;
+    }
+    
+    .instagram-embed-wrapper iframe {
+        height: 220px !important;
+        transform: scale(1); /* Bỏ transform scale */
+        transform-origin: top center;
+    }
+    
+    /* COMPACT PRODUCT INFO */
+    .product-card {
+        border-radius: 10px;
+        margin: 0;
+    }
+    
+    .product-info {
+        padding: 15px 12px !important;
+    }
+    
+    /* COMPACT HEADER */
+    .product-info-header {
+        margin-bottom: 12px !important;
+        padding-bottom: 10px;
+        gap: 8px;
+    }
+    
+    .product-title-wrapper .main-title {
+        font-size: 1.1rem !important;
+        margin-bottom: 3px;
+        line-height: 1.3;
+    }
+    
+    .product-title-wrapper .sub-title {
+        font-size: 0.8rem !important;
+        gap: 4px;
+    }
+    
+    /* COMPACT STATUS SECTION */
+    .product-status-info {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 0;
+        gap: 10px;
+    }
+    
+    .product-status-badge {
+        min-width: 85px !important;
+        padding: 5px 10px !important;
+        font-size: 0.75rem !important;
+        margin: 0 !important;
+    }
+    
+    .product-id {
+        font-size: 0.75rem !important;
+        margin: 0 !important;
+    }
+    
+    /* COMPACT DETAILS GRID - 2x2 layout */
+    .product-details-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        padding: 10px !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .product-detail-item {
+        padding: 6px !important;
+        border-radius: 5px;
+        background: #f5f5f5;
+        margin: 0;
+        gap: 6px;
+        min-height: auto;
+    }
+    
+    .product-detail-item i {
+        font-size: 0.8rem !important;
+        width: 16px;
+    }
+    
+    .product-detail-item .label {
+        font-size: 0.75rem !important;
+        line-height: 1.2;
+        margin-bottom: 2px;
+    }
+    
+    .product-detail-item .value {
+        font-size: 0.85rem !important;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+    
+    /* COMPACT NOTES - chỉ hiển thị nếu có */
+    .product-notes {
+        padding: 8px 10px !important;
+        margin: 10px 0 !important;
+        font-size: 0.8rem !important;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Giới hạn 2 dòng */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .product-notes strong {
+        font-size: 0.8rem;
+    }
+    
+    /* COMPACT BUTTON */
+    .instagram-link-btn {
+        padding: 10px 12px !important;
+        font-size: 0.85rem !important;
+        margin-top: 8px !important;
+        border-radius: 5px;
+    }
+    
+    .instagram-link-btn i {
+        font-size: 1rem;
+    }
+    
+    /* COMPACT LOADING STATE */
+    .instagram-embed-loading {
+        padding: 15px;
+    }
+    
+    .instagram-embed-loading i {
+        font-size: 1.5rem;
+    }
+    
+    .instagram-embed-loading span {
+        font-size: 0.85rem;
+    }
+    
+    /* Reduce container padding */
+    .container {
+        padding: 0 12px;
+    }
+}
+
+/* Very small screens (iPhone SE) */
+@media (max-width: 375px) {
+    .instagram-embed-container {
+        height: 200px !important;
+    }
+    
+    .instagram-embed-wrapper iframe {
+        height: 200px !important;
+    }
+    
+    /* Even more compact layout */
+    .product-details-grid {
+        gap: 6px !important;
+        padding: 8px !important;
+    }
+    
+    .product-detail-item {
+        padding: 4px 6px !important;
+    }
+    
+    .product-detail-item .label {
+        font-size: 0.7rem !important;
+    }
+    
+    .product-detail-item .value {
+        font-size: 0.8rem !important;
+    }
+    
+    .product-status-badge {
+        min-width: 75px !important;
+        padding: 4px 8px !important;
+        font-size: 0.7rem !important;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 320px) {
+    .instagram-embed-container {
+        height: 180px !important;
+    }
+    
+    .instagram-embed-wrapper iframe {
+        height: 180px !important;
+    }
+    
+    /* Single column for details on very small screens */
+    .product-details-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .product-info {
+        padding: 12px 10px !important;
+    }
+}
+
+/* ============================================
+   LIST VIEW OPTIMIZATION FOR MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .list-view .product-card {
+        flex-direction: column !important;
+        height: auto;
+    }
+    
+    .list-view .instagram-embed-container {
+        width: 100% !important;
+        height: 200px !important;
+    }
+    
+    .list-view .product-info {
+        width: 100% !important;
+        padding: 15px 12px !important;
+    }
+}
+
+/* ============================================
+   FURTHER COMPACT OPTIONS (OPTIONAL)
+   ============================================ */
+
+/* Option 1: Hide some elements on mobile */
+@media (max-width: 768px) {
+    /* Có thể ẩn ID nếu cần */
+    .product-id.hidden-on-mobile {
+        display: none;
+    }
+    
+    /* Có thể rút gọn notes */
+    .product-notes.compact {
+        -webkit-line-clamp: 1;
+    }
+    
+    /* Có thể ẩn icon trong details */
+    .product-detail-item.hide-icon i {
+        display: none;
+    }
+}
+
+/* Option 2: Horizontal scroll layout for products */
+@media (max-width: 768px) {
+    .products-container.horizontal-scroll {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 12px;
+        padding: 5px 0 15px;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .products-container.horizontal-scroll .product-card {
+        flex: 0 0 85vw;
+        scroll-snap-align: start;
+        margin: 0;
+    }
+    
+    .products-container.horizontal-scroll::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .products-container.horizontal-scroll::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 2px;
+    }
+    
+    .products-container.horizontal-scroll::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 2px;
+    }
+}
+
+/* ============================================
+   IMPROVED TOUCH INTERACTIONS
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Prevent text selection on tap */
+    .product-card {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+    
+    /* Better touch feedback */
+    .product-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s;
+    }
+    
+    /* Improve button touch */
+    .instagram-link-btn:active {
+        transform: scale(0.95);
+        opacity: 0.9;
+    }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Reduce rendering load */
+@media (max-width: 768px) {
+    .product-card {
+        will-change: transform;
+        backface-visibility: hidden;
+    }
+    
+    /* Optimize iframe rendering */
+    .instagram-embed-wrapper iframe {
+        will-change: transform;
+    }
+}
+
+/* ============================================
+   CUSTOM PROPERTIES FOR FINE-TUNING
+   ============================================ */
+
+:root {
+    --mobile-embed-height: 220px;
+    --mobile-card-padding: 12px;
+    --mobile-font-sm: 0.8rem;
+    --mobile-font-xs: 0.75rem;
+    --mobile-gap-small: 8px;
+    --mobile-gap-tiny: 4px;
+}
+
+@media (max-width: 768px) {
+    .instagram-embed-container {
+        height: var(--mobile-embed-height) !important;
+    }
+    
+    .instagram-embed-wrapper iframe {
+        height: var(--mobile-embed-height) !important;
+    }
+    
+    .product-info {
+        padding: var(--mobile-card-padding) !important;
+    }
+    
+    .product-details-grid {
+        gap: var(--mobile-gap-small) !important;
+    }
+    
+    .product-title-wrapper .sub-title {
+        font-size: var(--mobile-font-sm) !important;
+    }
+    
+    .product-detail-item .label {
+        font-size: var(--mobile-font-xs) !important;
+    }
+}
+/* ============================================
+   UPDATE: REMOVE ID, MOVE STATUS TO RIGHT
+   ============================================ */
+
+/* Desktop layout - Status ở bên phải */
+.product-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.product-title-wrapper {
+    flex: 1;
+}
+
+.product-title-wrapper .main-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+}
+
+.product-title-wrapper .sub-title {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Status info - chỉ còn status badge ở bên phải */
+.product-status-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0; /* Bỏ gap vì chỉ còn status */
+}
+
+.product-status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    min-width: 100px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s;
+    margin: 0; /* Bỏ margin */
+}
+
+.product-status-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Xóa product-id */
+.product-id {
+    display: none !important;
+}
+
+/* Cập nhật product details grid - 3 items thay vì 4 */
+.product-details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns thay vì 4 */
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .product-info-header {
+        flex-direction: row; /* Giữ row layout trên mobile */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .product-title-wrapper {
+        flex: 1;
+    }
+    
+    .product-title-wrapper .main-title {
+        font-size: 1.1rem;
+        margin-bottom: 2px;
+    }
+    
+    .product-title-wrapper .sub-title {
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+    
+    .product-status-info {
+        align-items: flex-end;
+    }
+    
+    .product-status-badge {
+        min-width: 85px;
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        margin: 0;
+    }
+    
+    /* Mobile: 2 columns cho details grid */
+    .product-details-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+    
+    /* Ẩn item thứ 4 nếu có */
+    .product-detail-item:nth-child(4) {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-info-header {
+        gap: 8px;
+    }
+    
+    .product-title-wrapper .main-title {
+        font-size: 1rem;
+    }
+    
+    .product-title-wrapper .sub-title {
+        font-size: 0.75rem;
+    }
+    
+    .product-status-badge {
+        min-width: 75px;
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .product-details-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+}
+
+/* ============================================
+   ALTERNATIVE LAYOUT OPTION (CLEANER)
+   ============================================ */
+
+/* Option 1: Status integrated with title */
+.product-header-compact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.product-title-with-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-title-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.product-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-top: 2px;
+}
+
+/* Status badge standalone */
+.status-badge-standalone {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+}
+
+/* Option 2: Status as part of details grid */
+.product-details-with-status {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.status-detail-item {
+    grid-column: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+/* ============================================
+   IMPROVED STATUS BADGE DESIGNS
+   ============================================ */
+
+/* Modern status badge designs */
+.status-badge-modern {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border: none;
+    cursor: default;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.status-badge-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(255,255,255,0.1) 0%, 
+        rgba(255,255,255,0.2) 50%, 
+        rgba(255,255,255,0.1) 100%);
+    z-index: -1;
+    border-radius: 20px;
+}
+
+.status-badge-modern.status-available {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+.status-badge-modern.status-sold {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+/* Status badge with icon */
+.status-badge-icon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+}
+
+.status-badge-icon i {
+    font-size: 0.8rem;
+}
+
+/* Compact status badge for mobile */
+.status-badge-compact {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    border-radius: 15px;
+}
+
+/* ============================================
+   FIX FOR IFRAME Z-INDEX ISSUES
+   ============================================ */
+
+/* Đảm bảo status badge không bị iframe đè */
+.product-status-info {
+    position: relative;
+    z-index: 10;
+}
+
+.product-status-badge {
+    position: relative;
+    z-index: 11;
+}
+
+/* ============================================
+   ANIMATION FOR STATUS CHANGES
+   ============================================ */
+
+@keyframes statusPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.status-badge-pulse {
+    animation: statusPulse 2s infinite;
+}
+
+/* Hover effect */
+.product-status-badge:hover {
+    animation: none;
+    transform: translateY(-2px);
+}
