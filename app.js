@@ -4,9 +4,6 @@ const GOOGLE_SHEETS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0NT
 // Biến toàn cục
 let productsData = [];
 let filteredProducts = [];
-let currentFilters = {
-    gender: [], category: [], size: [], status: []
-};
 
 // DOM Elements
 const productsContainer = document.getElementById('productsContainer');
@@ -52,7 +49,6 @@ async function loadProductsData() {
 function parseCSV(csvText) {
     const products = [];
     const lines = csvText.split('\n');
-    const headers = lines[0].split(',').map(h => h.trim());
     
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
@@ -144,14 +140,12 @@ function createProductCard(product) {
         </div>
         
         <div class="product-info">
-            
             <!-- 3 THÔNG TIN TRÊN 1 DÒNG -->
             <div class="product-details-inline">
                 <div class="detail-inline-item">
                     <div class="detail-inline-icon">
                         <i class="fas fa-ruler"></i>
                     </div>
-                
                     <div class="detail-inline-value">${product.size}</div>
                 </div>
                 
@@ -159,7 +153,6 @@ function createProductCard(product) {
                     <div class="detail-inline-icon">
                         <i class="fas fa-user"></i>
                     </div>
-                    
                     <div class="detail-inline-value">${genderText}</div>
                 </div>
                 
@@ -167,19 +160,18 @@ function createProductCard(product) {
                     <div class="detail-inline-icon">
                         <i class="fas fa-tag"></i>
                     </div>
-                    
                     <div class="detail-inline-value">${categoryText}</div>
                 </div>
             </div>
 
-                        <!-- STATUS VÀ NOTES CÙNG DÒNG -->
+            <!-- STATUS VÀ NOTES CÙNG DÒNG -->
             <div class="notes-badge-container">
                 <div class="status-badge-inline ${statusClass}">
                     <i class="fas fa-${statusText === 'Còn hàng' ? 'check' : 'times'}"></i>
                     ${statusText}
                 </div>
                 <div class="product-notes-inline">
-                    <i clas="fas"> ${hasNotes ? `${notesDisplay}` : '<em>Không có ghi chú</em>'}</i>
+                    ${hasNotes ? `${notesDisplay}` : '<em>Không có ghi chú</em>'}
                 </div>
             </div>
             
@@ -200,13 +192,6 @@ function filterProducts() {
     const categoryFilters = getSelectedValues('category');
     const sizeFilters = getSelectedValues('size');
     const statusFilters = getSelectedValues('status');
-    
-    currentFilters = {
-        gender: genderFilters,
-        category: categoryFilters,
-        size: sizeFilters,
-        status: statusFilters
-    };
     
     filteredProducts = productsData.filter(product => {
         if (genderFilters.length > 0 && !genderFilters.includes('all')) {
@@ -267,6 +252,7 @@ function showNotification(message, type = "info") {
 }
 
 function setupEventListeners() {
+    // Filter checkboxes
     document.querySelectorAll('.filter-checkbox input').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             const id = this.id;
@@ -285,18 +271,23 @@ function setupEventListeners() {
         });
     });
     
+    // Reset filters
     document.getElementById('resetFilters').addEventListener('click', resetFilters);
+    
+    // View controls
     document.getElementById('gridView').addEventListener('click', () => {
         productsContainer.className = 'products-container grid-view';
         document.getElementById('gridView').classList.add('active');
         document.getElementById('listView').classList.remove('active');
     });
+    
     document.getElementById('listView').addEventListener('click', () => {
         productsContainer.className = 'products-container list-view';
         document.getElementById('listView').classList.add('active');
         document.getElementById('gridView').classList.remove('active');
     });
     
+    // Refresh button
     const refreshBtn = document.createElement('button');
     refreshBtn.id = 'refreshDataBtn';
     refreshBtn.className = 'btn-refresh';
