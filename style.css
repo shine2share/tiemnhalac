@@ -2545,15 +2545,6 @@ footer {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
 }
 
-.detail-inline-label {
-    font-size: 0.75rem;
-    color: var(--text-light);
-    margin-bottom: 3px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
 .detail-inline-value {
     font-size: 0.95rem;
     font-weight: 600;
@@ -2591,11 +2582,6 @@ footer {
         height: 28px;
         margin-bottom: 5px;
     }
-    
-    .detail-inline-label {
-        font-size: 0.7rem;
-    }
-    
     .detail-inline-value {
         font-size: 0.85rem;
     }
@@ -2620,10 +2606,6 @@ footer {
         margin-bottom: 4px;
     }
     
-    .detail-inline-label {
-        font-size: 0.65rem;
-    }
-    
     .detail-inline-value {
         font-size: 0.8rem;
     }
@@ -2644,10 +2626,6 @@ footer {
         width: 22px;
         height: 22px;
         font-size: 0.8rem;
-    }
-    
-    .detail-inline-label {
-        font-size: 0.6rem;
     }
     
     .detail-inline-value {

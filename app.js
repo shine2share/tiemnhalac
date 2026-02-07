@@ -161,7 +161,7 @@ function createProductCard(product) {
                     <div class="detail-inline-icon">
                         <i class="fas fa-ruler"></i>
                     </div>
-                    <div class="detail-inline-label">SIZE</div>
+                
                     <div class="detail-inline-value">${product.size}</div>
                 </div>
                 
@@ -169,7 +169,7 @@ function createProductCard(product) {
                     <div class="detail-inline-icon">
                         <i class="fas fa-user"></i>
                     </div>
-                    <div class="detail-inline-label">GIỚI TÍNH</div>
+                    
                     <div class="detail-inline-value">${genderText}</div>
                 </div>
                 
@@ -177,7 +177,7 @@ function createProductCard(product) {
                     <div class="detail-inline-icon">
                         <i class="fas fa-tag"></i>
                     </div>
-                    <div class="detail-inline-label">LOẠI</div>
+                    
                     <div class="detail-inline-value">${categoryText}</div>
                 </div>
             </div>
