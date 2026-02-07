@@ -807,3 +807,347 @@ footer {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+/* Instagram Embed Styles - Thêm vào cuối file style.css */
+
+/* Instagram embed card */
+.instagram-embed-card {
+    width: 100%;
+    background: white;
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow: hidden;
+    border-bottom: 3px solid #f0f0f0;
+}
+
+.instagram-embed-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 450px;
+    background: #fafafa;
+}
+
+.instagram-embed-wrapper iframe {
+    width: 100%;
+    height: 450px;
+    border: none;
+    background: transparent;
+}
+
+.instagram-embed-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    gap: 15px;
+    z-index: 1;
+}
+
+.instagram-embed-loading i {
+    font-size: 2.5rem;
+    color: #E1306C;
+}
+
+.instagram-embed-loading span {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.instagram-error {
+    padding: 40px 20px;
+    background: #f8f8f8;
+    text-align: center;
+    color: #666;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.instagram-error i {
+    font-size: 3rem;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+.instagram-error p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.instagram-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+    color: white !important;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.instagram-link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(225, 48, 108, 0.3);
+    color: white;
+}
+
+.instagram-link-btn i {
+    font-size: 1.1rem;
+}
+
+/* Product card với Instagram embed */
+.product-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Product info layout */
+.product-info {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.product-title span:first-child {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.product-category {
+    background: #f0f7ff;
+    color: #1a73e8;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.product-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.product-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.product-detail i {
+    color: var(--secondary-color);
+    width: 16px;
+    text-align: center;
+}
+
+.product-description {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    color: #555;
+    border-left: 4px solid var(--secondary-color);
+    flex: 1;
+}
+
+.product-description strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Product status cho Instagram embed */
+.product-status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.status-available {
+    background: linear-gradient(135deg, var(--available-color), #2ecc71);
+}
+
+.status-sold {
+    background: linear-gradient(135deg, var(--sold-color), #c0392b);
+}
+
+/* Responsive cho Instagram embed */
+@media (max-width: 768px) {
+    .instagram-embed-wrapper,
+    .instagram-embed-wrapper iframe {
+        height: 350px;
+    }
+    
+    .product-details {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .instagram-embed-loading {
+        padding: 20px;
+    }
+    
+    .instagram-embed-loading i {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .instagram-embed-wrapper,
+    .instagram-embed-wrapper iframe {
+        height: 300px;
+        min-height: 300px;
+    }
+    
+    .product-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .product-category {
+        align-self: flex-start;
+    }
+}
+
+/* List view với Instagram embed */
+.list-view .product-card {
+    flex-direction: row;
+    height: auto;
+}
+
+.list-view .instagram-embed-card {
+    width: 300px;
+    flex-shrink: 0;
+    border-radius: var(--radius) 0 0 var(--radius);
+    border-bottom: none;
+    border-right: 3px solid #f0f0f0;
+}
+
+.list-view .instagram-embed-wrapper,
+.list-view .instagram-embed-wrapper iframe {
+    height: 100%;
+    min-height: 300px;
+}
+
+.list-view .product-info {
+    flex: 1;
+    padding: 25px;
+}
+
+@media (max-width: 768px) {
+    .list-view .product-card {
+        flex-direction: column;
+    }
+    
+    .list-view .instagram-embed-card {
+        width: 100%;
+        border-radius: var(--radius) var(--radius) 0 0;
+        border-right: none;
+        border-bottom: 3px solid #f0f0f0;
+    }
+    
+    .list-view .instagram-embed-wrapper,
+    .list-view .instagram-embed-wrapper iframe {
+        height: 350px;
+    }
+}
+
+/* Animation cho iframe load */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.instagram-embed-wrapper iframe {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Loading spinner animation */
+.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Container spacing */
+.products-container {
+    gap: 30px;
+}
+
+/* Empty state styling */
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.no-products i {
+    font-size: 3rem;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.no-products h4 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.no-products p {
+    color: var(--text-light);
+    font-size: 1rem;
+}
