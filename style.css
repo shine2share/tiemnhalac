@@ -3451,6 +3451,16 @@ footer {
     color: white;
 }
 
+.product-notes-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
 .notes-badge-container {
     display: flex;
     align-items: center;
