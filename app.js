@@ -144,16 +144,6 @@ function createProductCard(product) {
         </div>
         
         <div class="product-info">
-            <!-- STATUS VÀ NOTES CÙNG DÒNG -->
-            <div class="notes-badge-container">
-            <div class="status-badge-inline ${statusClass}">
-                <i class="fas fa-${statusText === 'Còn hàng' ? 'check' : 'times'}"></i>
-                ${statusText}
-            </div>
-            <div style="flex: 1; font-size: 0.9rem; color: #555;">
-                ${hasNotes ? `<strong>Ghi chú:</strong> ${notesDisplay}` : '<em>Không có ghi chú</em>'}
-            </div>
-            </div>
             
             <!-- 3 THÔNG TIN TRÊN 1 DÒNG -->
             <div class="product-details-inline">
@@ -180,6 +170,17 @@ function createProductCard(product) {
                     
                     <div class="detail-inline-value">${categoryText}</div>
                 </div>
+            </div>
+
+                        <!-- STATUS VÀ NOTES CÙNG DÒNG -->
+            <div class="notes-badge-container">
+            <div class="status-badge-inline ${statusClass}">
+                <i class="fas fa-${statusText === 'Còn hàng' ? 'check' : 'times'}"></i>
+                ${statusText}
+            </div>
+            <div style="flex: 1; font-size: 0.9rem; color: #555;">
+                ${hasNotes ? `<strong>Ghi chú:</strong> ${notesDisplay}` : '<em>Không có ghi chú</em>'}
+            </div>
             </div>
             
             <!-- BUTTON -->
