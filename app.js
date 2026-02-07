@@ -259,10 +259,6 @@ function openImageModal(instagramUrl, placeholderImage, category, gender) {
             </div>
             
             <div class="modal-body">
-                <div class="image-preview">
-                    <img src="${placeholderImage}" alt="${category} ${gender}" id="modal-image">
-                </div>
-                
                 ${embedUrl ? `
                 <div class="instagram-embed-container">
                     <div class="embed-loading">
@@ -276,7 +272,7 @@ function openImageModal(instagramUrl, placeholderImage, category, gender) {
                             onload="this.parentElement.querySelector('.embed-loading').style.display='none'">
                     </iframe>
                 </div>
-                ` : ''}
+                ` : '<p style="text-align: center; color: #999; padding: 40px;">Không có bài viết Instagram</p>'}
             </div>
         </div>
     `;
