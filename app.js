@@ -43,6 +43,11 @@ const noProducts = document.getElementById('noProducts');
 async function init() {
     addCustomStyles();
     await loadProductsData();
+    // Ẩn skeleton loader sau khi dữ liệu được tải
+    const skeletonLoader = document.getElementById('skeletonLoader');
+    if (skeletonLoader) {
+        skeletonLoader.parentElement.innerHTML = '';
+    }
     renderProducts();
     setupEventListeners();
     updateProductCount();
