@@ -110,12 +110,15 @@ function createProductCard(product) {
     const isMobile = window.innerWidth <= 768;
     const embedHeight = isMobile ? '220px' : '400px';
     
+    // Xử lý notes
     let notesDisplay = product.notes || '';
-    if (isMobile && notesDisplay.length > 60) {
-        notesDisplay = notesDisplay.substring(0, 60) + '...';
+    let hasNotes = notesDisplay.trim().length > 0;
+    
+    // Trên mobile, cắt ngắn notes nếu cần
+    if (isMobile && notesDisplay.length > 80) {
+        notesDisplay = notesDisplay.substring(0, 80) + '...';
     }
     
-    // Phiên bản 1: Đơn giản - chỉ main title
     card.innerHTML = `
         <div class="instagram-embed-container" style="height: ${embedHeight}">
             ${postId ? `
@@ -141,16 +144,18 @@ function createProductCard(product) {
         </div>
         
         <div class="product-info">
-            <div class="product-info-header">
-                <div class="product-title-with-badge">
-                    <div class="title-text">${genderText}</div>
-                    <div class="category-badge">${categoryText}</div>
-                </div>
-                <div class="product-status-info">
-                    <div class="product-status-badge ${statusClass}">${statusText}</div>
-                </div>
+            <!-- STATUS VÀ NOTES CÙNG DÒNG -->
+            <div class="notes-badge-container">
+            <div class="status-badge-inline ${statusClass}">
+                <i class="fas fa-${statusText === 'Còn hàng' ? 'check' : 'times'}"></i>
+                ${statusText}
+            </div>
+            <div style="flex: 1; font-size: 0.9rem; color: #555;">
+                ${hasNotes ? `<strong>Ghi chú:</strong> ${notesDisplay}` : '<em>Không có ghi chú</em>'}
+            </div>
             </div>
             
+            <!-- 3 THÔNG TIN TRÊN 1 DÒNG -->
             <div class="product-details-inline">
                 <div class="detail-inline-item">
                     <div class="detail-inline-icon">
@@ -177,13 +182,7 @@ function createProductCard(product) {
                 </div>
             </div>
             
-            ${product.notes ? `
-            <div class="product-notes">
-                <strong>Ghi chú:</strong>
-                <p>${notesDisplay}</p>
-            </div>
-            ` : ''}
-            
+            <!-- BUTTON -->
             ${product.url ? `
             <a href="${product.url}" target="_blank" class="instagram-link-btn">
                 <i class="fab fa-instagram"></i> Xem bài viết

@@ -2999,3 +2999,486 @@ footer {
         font-size: 1rem;
     }
 }
+/* ============================================
+   NOTES REPLACE TITLE, STATUS IN CARD
+   ============================================ */
+
+/* Bỏ product-info-header */
+.product-info-header {
+    display: none !important;
+}
+
+/* Status badge hiển thị trong product info */
+.status-in-card {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    gap: 6px;
+}
+
+.status-in-card i {
+    font-size: 0.8rem;
+}
+
+.status-in-card.status-available {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+.status-in-card.status-sold {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+/* Notes section thay thế title */
+.notes-as-title {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.notes-as-title strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.notes-as-title p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* 3-info inline điều chỉnh */
+.product-details-inline {
+    margin-bottom: 20px;
+}
+
+/* Product info layout mới */
+.product-info {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .status-in-card {
+        padding: 5px 12px;
+        font-size: 0.75rem;
+        margin-bottom: 12px;
+    }
+    
+    .notes-as-title {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .notes-as-title strong {
+        font-size: 0.95rem;
+    }
+    
+    .notes-as-title p {
+        font-size: 0.9rem;
+    }
+    
+    .product-details-inline {
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .status-in-card {
+        padding: 4px 10px;
+        font-size: 0.7rem;
+        margin-bottom: 10px;
+    }
+    
+    .notes-as-title {
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .notes-as-title strong {
+        font-size: 0.9rem;
+    }
+    
+    .notes-as-title p {
+        font-size: 0.85rem;
+    }
+}
+
+/* ============================================
+   ALTERNATIVE LAYOUT OPTIONS
+   ============================================ */
+
+/* Option 1: Notes và status cùng dòng */
+.notes-status-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.notes-section {
+    flex: 1;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.status-section {
+    flex-shrink: 0;
+}
+
+/* Option 2: Notes với badge */
+.notes-with-badge {
+    position: relative;
+    padding: 15px 15px 15px 50px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.notes-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.notes-badge.status-available {
+    background: #27ae60;
+}
+
+.notes-badge.status-sold {
+    background: #e74c3c;
+}
+
+/* Option 3: Minimal notes */
+.notes-minimal {
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: #555;
+    border: 1px solid #e0e0e0;
+}
+
+.notes-minimal strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* ============================================
+   EMPTY NOTES STATE
+   ============================================ */
+
+/* Khi không có ghi chú */
+.empty-notes {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.empty-notes i {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #ccc;
+    display: block;
+}
+
+/* ============================================
+   CARD HEIGHT CONSISTENCY
+   ============================================ */
+
+/* Đảm bảo card đồng đều chiều cao */
+.product-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.instagram-embed-container {
+    flex-shrink: 0;
+}
+
+.product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================
+   BUTTON STYLING
+   ============================================ */
+
+.instagram-link-btn {
+    margin-top: auto; /* Đẩy button xuống dưới cùng */
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.instagram-link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(225, 48, 108, 0.3);
+}
+
+@media (max-width: 768px) {
+    .instagram-link-btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+/* ============================================
+   STATUS AND NOTES INLINE
+   ============================================ */
+
+/* Container cho status và notes cùng dòng */
+.status-notes-inline {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+/* Status badge */
+.status-inline {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.status-inline i {
+    font-size: 0.8rem;
+}
+
+.status-inline.status-available {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+.status-inline.status-sold {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+/* Notes section */
+.notes-inline {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.notes-inline strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.notes-inline p {
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Empty notes state */
+.empty-notes-inline {
+    flex: 1;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+    color: var(--text-light);
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.empty-notes-inline i {
+    font-size: 1rem;
+    margin-right: 6px;
+    color: #ccc;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .status-notes-inline {
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .status-inline {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+    
+    .notes-inline {
+        padding: 10px 12px;
+    }
+    
+    .notes-inline strong {
+        font-size: 0.9rem;
+    }
+    
+    .notes-inline p {
+        font-size: 0.85rem;
+    }
+    
+    .empty-notes-inline {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .status-notes-inline {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .status-inline {
+        align-self: flex-start;
+    }
+    
+    .notes-inline,
+    .empty-notes-inline {
+        width: 100%;
+    }
+}
+
+/* ============================================
+   COMPACT VERSION
+   ============================================ */
+
+/* Compact layout cho mobile */
+.status-notes-compact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.status-compact {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+}
+
+.notes-compact {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.3;
+}
+
+.notes-compact strong {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+/* ============================================
+   MINIMAL VERSION
+   ============================================ */
+
+.status-notes-minimal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.status-minimal {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+}
+
+.notes-minimal-inline {
+    flex: 1;
+    font-size: 0.9rem;
+    color: #555;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid var(--secondary-color);
+}
+
+/* ============================================
+   BADGE STYLE
+   ============================================ */
+
+.status-badge-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+}
+
+.notes-badge-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
