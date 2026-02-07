@@ -67,6 +67,8 @@ async function loadProductsData() {
         
         const csvText = await response.text();
         productsData = parseCSV(csvText);
+        // try to load Instagram thumbnails (via proxy) and cache them
+        await loadInstagramImages(productsData);
         filteredProducts = [...productsData];
         
         console.log(`Đã tải ${productsData.length} sản phẩm`);
@@ -77,6 +79,8 @@ async function loadProductsData() {
         
         // Dùng dữ liệu mẫu
         productsData = getSampleData();
+        // populate thumbnails for sample data as well
+        await loadInstagramImages(productsData);
         filteredProducts = [...productsData];
     }
 }
@@ -102,9 +106,10 @@ function parseCSV(csvText) {
                 size: values[3]?.trim() || '',
                 url: values[4]?.trim() || '',
                 status: values[5]?.trim() || '',
-                notes: values[6]?.trim() || ''
+                notes: values[6]?.trim() || '',
+                imageUrl: ''
             };
-            
+
             products.push(product);
         }
     }
@@ -121,6 +126,60 @@ function getPlaceholderImage(category, gender) {
     // Trả về ảnh ngẫu nhiên từ mảng
     const randomIndex = Math.floor(Math.random() * images.length);
     return images[randomIndex];
+}
+
+// Hàm lấy ảnh từ Instagram URL sử dụng oEmbed qua proxy (và cache)
+async function getInstagramImageUrl(instagramUrl) {
+    if (!instagramUrl) return null;
+    if (imageCache.has(instagramUrl)) return imageCache.get(instagramUrl);
+
+    // Use AllOrigins proxy to avoid CORS
+    const oembed = `https://www.instagram.com/oembed/?url=${encodeURIComponent(instagramUrl)}`;
+    const proxy = 'https://api.allorigins.win/raw?url=';
+
+    try {
+        const res = await fetch(proxy + encodeURIComponent(oembed));
+        if (res.ok) {
+            const data = await res.json();
+            const thumb = data.thumbnail_url || data.thumbnail_url_with_play_button || null;
+            if (thumb) {
+                imageCache.set(instagramUrl, thumb);
+                return thumb;
+            }
+        }
+    } catch (e) {
+        console.warn('oEmbed proxy fetch failed', e);
+    }
+
+    // Fallback: try direct oEmbed (likely CORS blocked)
+    try {
+        const direct = await fetch(oembed);
+        if (direct.ok) {
+            const d = await direct.json();
+            const thumb = d.thumbnail_url || null;
+            if (thumb) {
+                imageCache.set(instagramUrl, thumb);
+                return thumb;
+            }
+        }
+    } catch (e) {
+        // ignore
+    }
+
+    return null;
+}
+
+// Tải thumbnails cho mảng sản phẩm (song song)
+async function loadInstagramImages(products) {
+    const tasks = products.map(async (p) => {
+        if (!p.url) {
+            p.imageUrl = getPlaceholderImage(p.category, p.gender);
+            return;
+        }
+        const thumb = await getInstagramImageUrl(p.url);
+        p.imageUrl = thumb || getPlaceholderImage(p.category, p.gender);
+    });
+    await Promise.all(tasks);
 }
 
 // Hàm render sản phẩm
@@ -150,16 +209,17 @@ function createProductCard(product) {
     const statusText = product.status === 'AVAILABLE' ? 'Còn hàng' : 'Đã bán';
     const statusClass = product.status === 'AVAILABLE' ? 'status-available' : 'status-sold';
     
-    // Lấy placeholder image phù hợp
+    // Lấy image (Instagram thumbnail if available) hoặc placeholder
     const placeholderImage = getPlaceholderImage(product.category, product.gender);
-    
+    const imageUrl = product.imageUrl || placeholderImage;
+
     // Tạo Instagram embed URL
     const embedUrl = getInstagramEmbedUrl(product.url);
-    
+
     card.innerHTML = `
         <div class="product-image">
             <div class="image-container">
-                <img src="${embedUrl ? embedUrl : placeholderImage}" 
+                <img src="${imageUrl}" 
                      alt="${categoryText} ${genderText} size ${product.size}" 
                      class="product-img" 
                      loading="lazy">
@@ -207,8 +267,8 @@ function createProductCard(product) {
     
     // Click vào card để xem ảnh lớn
     card.addEventListener('click', (e) => {
-        if (!e.target.closest('.btn-view-instagram')) {
-            openImageModal(product.url, placeholderImage, categoryText, genderText);
+            if (!e.target.closest('.btn-view-instagram')) {
+            openImageModal(product.url, imageUrl, categoryText, genderText);
         }
     });
     
