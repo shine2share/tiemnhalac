@@ -1151,3 +1151,233 @@ footer {
     color: var(--text-light);
     font-size: 1rem;
 }
+/* Cập nhật: Đưa status xuống product-info */
+.product-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.product-title-wrapper {
+    flex: 1;
+}
+
+.product-title-wrapper .main-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+}
+
+.product-title-wrapper .sub-title {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.product-status-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.product-status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    min-width: 100px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s;
+}
+
+.product-status-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.status-available {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+.status-sold {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.product-id {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+/* Cập nhật product details */
+.product-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.product-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-detail-item i {
+    color: var(--secondary-color);
+    width: 20px;
+    font-size: 1rem;
+}
+
+.product-detail-item .label {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.product-detail-item .value {
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+/* Cập nhật Instagram embed container */
+.instagram-embed-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background: #fafafa;
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow: hidden;
+}
+
+.instagram-embed-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.instagram-embed-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    color: #666;
+    gap: 15px;
+    z-index: 1;
+}
+
+.instagram-embed-loading i {
+    font-size: 2.5rem;
+    color: #E1306C;
+}
+
+.instagram-embed-loading span {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.instagram-embed-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.instagram-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 40px;
+    text-align: center;
+    color: #666;
+}
+
+.instagram-error i {
+    font-size: 3rem;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+/* Cập nhật product info layout */
+.product-info-content {
+    flex: 1;
+}
+
+.product-notes {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.product-notes strong {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.product-notes p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .instagram-embed-container {
+        height: 350px;
+    }
+    
+    .product-info-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .product-status-info {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .product-status-badge {
+        min-width: 90px;
+    }
+    
+    .product-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .instagram-embed-container {
+        height: 300px;
+    }
+    
+    .product-status-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}

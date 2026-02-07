@@ -108,7 +108,7 @@ function createProductCard(product) {
     const postId = extractPostId(product.url);
     
     card.innerHTML = `
-        <div class="instagram-embed-card">
+        <div class="instagram-embed-container">
             ${postId ? `
             <div class="instagram-embed-wrapper">
                 <div class="instagram-embed-loading">
@@ -119,48 +119,69 @@ function createProductCard(product) {
                         frameborder="0" 
                         scrolling="no" 
                         allowtransparency="true"
-                        onload="this.parentElement.querySelector('.instagram-embed-loading').style.display='none'">
+                        onload="this.classList.add('loaded'); this.parentElement.querySelector('.instagram-embed-loading').style.display='none'">
                 </iframe>
-                <div class="product-status ${statusClass}">${statusText}</div>
             </div>
             ` : `
             <div class="instagram-error">
                 <i class="fab fa-instagram"></i>
                 <p>Không có link Instagram</p>
-                <div class="product-status ${statusClass}">${statusText}</div>
             </div>
             `}
         </div>
         
         <div class="product-info">
-            <div class="product-title">
-                <span>${categoryText} ${genderText}</span>
-                <span class="product-category">${categoryText}</span>
+            <div class="product-info-header">
+                <div class="product-title-wrapper">
+                    <div class="main-title">${categoryText} ${genderText}</div>
+                    <div class="sub-title">
+                        <span>${categoryText}</span>
+                        <span>•</span>
+                        <span>${genderText}</span>
+                    </div>
+                </div>
+                <div class="product-status-info">
+                    <div class="product-status-badge ${statusClass}">${statusText}</div>
+                    <div class="product-id">ID: ${product.id}</div>
+                </div>
             </div>
             
-            <div class="product-details">
-                <div class="product-detail">
-                    <i class="fas fa-user"></i>
-                    <span>${genderText}</span>
-                </div>
-                <div class="product-detail">
+            <div class="product-details-grid">
+                <div class="product-detail-item">
                     <i class="fas fa-ruler"></i>
-                    <span>Size: ${product.size}</span>
+                    <div>
+                        <div class="label">Size</div>
+                        <div class="value">${product.size}</div>
+                    </div>
                 </div>
-                <div class="product-detail">
+                <div class="product-detail-item">
+                    <i class="fas fa-user"></i>
+                    <div>
+                        <div class="label">Giới tính</div>
+                        <div class="value">${genderText}</div>
+                    </div>
+                </div>
+                <div class="product-detail-item">
                     <i class="fas fa-tag"></i>
-                    <span>${statusText}</span>
+                    <div>
+                        <div class="label">Loại</div>
+                        <div class="value">${categoryText}</div>
+                    </div>
                 </div>
-                <div class="product-detail">
-                    <i class="fas fa-hashtag"></i>
-                    <span>ID: ${product.id}</span>
+                <div class="product-detail-item">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <div class="label">Trạng thái</div>
+                        <div class="value">${statusText}</div>
+                    </div>
                 </div>
             </div>
             
             ${product.notes ? `
-            <p class="product-description">
-                <strong>Ghi chú:</strong> ${product.notes}
-            </p>
+            <div class="product-notes">
+                <strong>Ghi chú:</strong>
+                <p>${product.notes}</p>
+            </div>
             ` : ''}
             
             ${product.url ? `
