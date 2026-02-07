@@ -115,6 +115,7 @@ function createProductCard(product) {
         notesDisplay = notesDisplay.substring(0, 60) + '...';
     }
     
+    // Phiên bản 1: Đơn giản - chỉ main title
     card.innerHTML = `
         <div class="instagram-embed-container" style="height: ${embedHeight}">
             ${postId ? `
@@ -141,42 +142,39 @@ function createProductCard(product) {
         
         <div class="product-info">
             <div class="product-info-header">
-                <div class="product-title-wrapper">
-                    <div class="main-title">${categoryText} ${genderText}</div>
-                    <div class="sub-title">
-                        <span>${categoryText}</span>
-                        <span>•</span>
-                        <span>${genderText}</span>
-                    </div>
+                <div class="product-title-with-badge">
+                    <div class="title-text">${genderText}</div>
+                    <div class="category-badge">${categoryText}</div>
                 </div>
                 <div class="product-status-info">
                     <div class="product-status-badge ${statusClass}">${statusText}</div>
                 </div>
             </div>
             
-            <div class="product-details-grid">
-                <div class="product-detail-item">
-                    <i class="fas fa-ruler"></i>
-                    <div>
-                        <div class="label">Size</div>
-                        <div class="value">${product.size}</div>
+            <div class="product-details-inline">
+                <div class="detail-inline-item">
+                    <div class="detail-inline-icon">
+                        <i class="fas fa-ruler"></i>
                     </div>
+                    <div class="detail-inline-label">SIZE</div>
+                    <div class="detail-inline-value">${product.size}</div>
                 </div>
-                <div class="product-detail-item">
-                    <i class="fas fa-user"></i>
-                    <div>
-                        <div class="label">Giới tính</div>
-                        <div class="value">${genderText}</div>
+                
+                <div class="detail-inline-item">
+                    <div class="detail-inline-icon">
+                        <i class="fas fa-user"></i>
                     </div>
+                    <div class="detail-inline-label">GIỚI TÍNH</div>
+                    <div class="detail-inline-value">${genderText}</div>
                 </div>
-                <div class="product-detail-item">
-                    <i class="fas fa-tag"></i>
-                    <div>
-                        <div class="label">Loại</div>
-                        <div class="value">${categoryText}</div>
+                
+                <div class="detail-inline-item">
+                    <div class="detail-inline-icon">
+                        <i class="fas fa-tag"></i>
                     </div>
+                    <div class="detail-inline-label">LOẠI</div>
+                    <div class="detail-inline-value">${categoryText}</div>
                 </div>
-                <!-- Đã bỏ item thứ 4 (status) vì đã move lên header -->
             </div>
             
             ${product.notes ? `
