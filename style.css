@@ -416,17 +416,6 @@ main {
     max-width: 100%;
 }
 
-/* Status & Notes Container */
-.notes-badge-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 8px;
-}
-
 .status-badge-inline {
     display: inline-flex;
     align-items: center;
@@ -725,13 +714,6 @@ footer {
         font-size: 0.85rem;
     }
     
-    /* Status & Notes */
-    .notes-badge-container {
-        padding: 8px;
-        margin-bottom: 12px;
-        gap: 8px;
-    }
-    
     .status-badge-inline {
         padding: 5px 10px;
         font-size: 0.75rem;
@@ -811,13 +793,7 @@ footer {
     .detail-inline-value {
         font-size: 0.8rem;
     }
-    
-    .notes-badge-container {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    
+
     .status-badge-inline {
         align-self: flex-start;
     }
@@ -858,4 +834,320 @@ footer {
 @keyframes fa-spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* ============================================
+   PRODUCT CARD GRID LAYOUT
+   ============================================ */
+
+/* Desktop: Hiển thị nhiều card hơn */
+.grid-view {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* Tablet: Tăng số lượng card */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .grid-view {
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    }
+}
+
+/* Large Desktop: Hiển thị tối đa 5 card trên 1 dòng */
+@media (min-width: 1400px) {
+    .grid-view {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+}
+
+/* ============================================
+   COMPACT PRODUCT CARD DESIGN
+   ============================================ */
+
+/* Giảm padding và margins cho card nhỏ gọn hơn */
+.product-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Giảm height của Instagram embed */
+.instagram-embed-container {
+    height: 320px; /* Giảm từ 400px */
+}
+
+/* Product info compact hơn */
+.product-info {
+    padding: 15px; /* Giảm từ 20px */
+}
+
+/* Giảm khoảng cách giữa các phần tử */
+.product-details-inline {
+    margin-bottom: 8px; /* Giảm từ 20px */
+    padding: 8px 10px; /* Giảm padding */
+    gap: 15px; /* Giảm từ 20px */
+}
+
+.detail-inline-icon {
+    width: 28px; /* Giảm từ 32px */
+    height: 28px;
+    font-size: 1rem; /* Giảm từ 1.1rem */
+    margin-bottom: 4px; /* Giảm từ 6px */
+}
+
+.detail-inline-value {
+    font-size: 0.9rem; /* Giảm từ 0.95rem */
+}
+
+.status-badge-inline {
+    padding: 5px 10px; /* Giảm từ 6px 12px */
+    font-size: 0.75rem; /* Giảm từ 0.8rem */
+}
+
+.product-notes-inline {
+    font-size: 0.85rem; /* Giảm từ 0.9rem */
+    line-height: 1.3; /* Giảm từ 1.4 */
+}
+
+/* Button nhỏ gọn hơn */
+.instagram-link-btn {
+    padding: 10px 15px; /* Giảm từ 12px 20px */
+    font-size: 0.9rem; /* Giảm từ 0.95rem */
+}
+
+/* ============================================
+   ULTRA COMPACT DESIGN OPTION
+   ============================================ */
+
+/* Option: Design siêu compact cho nhiều card */
+.product-card.ultra-compact {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-card.ultra-compact .instagram-embed-container {
+    height: 280px;
+}
+
+.product-card.ultra-compact .product-info {
+    padding: 12px;
+}
+
+.product-card.ultra-compact .product-details-inline {
+    padding: 6px 8px;
+    margin-bottom: 6px;
+    gap: 10px;
+}
+
+.product-card.ultra-compact .detail-inline-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+}
+
+.product-card.ultra-compact .detail-inline-value {
+    font-size: 0.85rem;
+}
+
+.product-card.ultra-compact .status-badge-inline {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+}
+
+.product-card.ultra-compact .product-notes-inline {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-card.ultra-compact .instagram-link-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS FOR COMPACT DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Mobile: 2 columns */
+    .grid-view {
+        grid-template-columns: repeat(2, 1fr); /* 2 cards trên mobile */
+        gap: 15px;
+    }
+    
+    .instagram-embed-container {
+        height: 180px !important; /* Giảm cho mobile */
+    }
+    
+    .product-info {
+        padding: 10px;
+    }
+    
+    .product-details-inline {
+        padding: 6px;
+        margin-bottom: 8px;
+        gap: 8px;
+    }
+    
+    .detail-inline-icon {
+        width: 22px;
+        height: 22px;
+        font-size: 0.85rem;
+    }
+    
+    .detail-inline-value {
+        font-size: 0.8rem;
+    }
+    
+    .product-notes-inline {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Small mobile: 2 columns với gap nhỏ */
+    .grid-view {
+        gap: 12px;
+    }
+    
+    .instagram-embed-container {
+        height: 160px !important;
+    }
+    
+    .product-details-inline {
+        gap: 6px;
+        padding: 5px;
+    }
+    
+    .detail-inline-icon {
+        width: 20px;
+        height: 20px;
+        font-size: 0.8rem;
+        margin-bottom: 3px;
+    }
+    
+    .detail-inline-value {
+        font-size: 0.75rem;
+    }
+}
+
+/* ============================================
+   GRID DENSITY OPTIONS
+   ============================================ */
+
+/* Option A: Medium density (4-5 cards trên desktop) */
+.grid-density-medium .grid-view {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+/* Option B: High density (5-6 cards trên desktop) */
+.grid-density-high .grid-view {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.grid-density-high .instagram-embed-container {
+    height: 280px;
+}
+
+.grid-density-high .product-info {
+    padding: 12px;
+}
+
+/* Option C: Ultra high density (tối đa 6+ cards) */
+.grid-density-ultra .grid-view {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.grid-density-ultra .instagram-embed-container {
+    height: 250px;
+}
+
+.grid-density-ultra .product-info {
+    padding: 10px;
+}
+
+.grid-density-ultra .product-details-inline {
+    padding: 6px;
+    margin-bottom: 6px;
+}
+
+.grid-density-ultra .detail-inline-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 0.9rem;
+}
+
+.grid-density-ultra .detail-inline-value {
+    font-size: 0.8rem;
+}
+
+/* ============================================
+   PRODUCT COUNT VISIBILITY
+   ============================================ */
+
+/* Hiển thị số lượng sản phẩm rõ ràng hơn */
+.products-header h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+#productCount {
+    background: var(--secondary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    margin-left: 6px;
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Tối ưu hiệu suất khi có nhiều card */
+.products-container {
+    will-change: contents;
+}
+
+/* Giảm animation cho nhiều card */
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ============================================
+   LOAD MORE FEATURE (OPTIONAL)
+   ============================================ */
+
+/* Nút Load More */
+.load-more-container {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.btn-load-more {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.btn-load-more:hover {
+    background: #5b4fcf;
+    transform: translateY(-2px);
 }

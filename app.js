@@ -163,17 +163,6 @@ function createProductCard(product) {
                     <div class="detail-inline-value">${categoryText}</div>
                 </div>
             </div>
-
-            <!-- STATUS VÀ NOTES CÙNG DÒNG -->
-            <div class="notes-badge-container">
-                <div class="status-badge-inline ${statusClass}">
-                    <i class="fas fa-${statusText === 'Còn hàng' ? 'check' : 'times'}"></i>
-                    ${statusText}
-                </div>
-                <div class="product-notes-inline">
-                    ${hasNotes ? `${notesDisplay}` : '<em>Không có ghi chú</em>'}
-                </div>
-            </div>
             
             <!-- BUTTON -->
             ${product.url ? `
